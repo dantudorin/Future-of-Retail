@@ -10,7 +10,7 @@ import java.awt.Image;
 
 @Controller
 @RequestMapping("/entry")
-public class EntryController {
+public class GateController {
     @Autowired
     private FaceCollection faceCollection;
 
