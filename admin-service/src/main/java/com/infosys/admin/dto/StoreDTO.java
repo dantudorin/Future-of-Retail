@@ -1,9 +1,19 @@
 package com.infosys.admin.dto;
 
 public class StoreDTO {
+
     String location;
     String name;
     Long id;
+
+    public StoreDTO() {
+    }
+
+    public StoreDTO(Long id,String name, String location) {
+        this.name = name;
+        this.location = location;
+        this.id = id;
+    }
 
     public StoreDTO(String name, String location) {
         this.name = name;

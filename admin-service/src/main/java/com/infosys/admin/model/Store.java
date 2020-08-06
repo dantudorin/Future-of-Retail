@@ -1,22 +1,26 @@
 package com.infosys.admin.model;
 
-import javax.persistence.GenerationType;
-import javax.persistence.GeneratedValue;
 import com.infosys.admin.dto.StoreDTO;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class Store {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name= "native", strategy = "native")
     private Long id;
-    private String location;
+
     private String name;
+
+    private String location;
+
     private Date createdAt;
 
-    protected Store() { }
+    public Store() { }
+
 
     public Store(String name, String location, Date date) {
         this.name = name;
@@ -69,15 +73,6 @@ public class Store {
 
         return createdAt;
     }
-
-    public Store updateFromDTO(StoreDTO storeDto) {
-
-        if (!(this.name.equals(storeDto.getName())))
-            this.name = storeDto.getName();
-
-        if (!(this.location.equals(storeDto.getLocation())))
-            this.location = storeDto.getLocation();
-
-        return this;
-    }
 }
+
+
