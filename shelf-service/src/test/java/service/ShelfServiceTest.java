@@ -13,11 +13,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 
-import static java.nio.file.Files.readAllBytes;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -33,16 +30,12 @@ public class ShelfServiceTest {
     @Test
     public void shouldPutOnShelf() throws CustomerNotFoundException, IOException {
         String collectionName = "Carrefour";
-        Path path = Paths.get("sami.jpg");
         String name = "sami.jpg";
-        String originalFileName = "sami.jpg";
         String contentType = "image/jpg";
-        byte[] content = null;
-        content = readAllBytes(path);
-        MultipartFile result = new MockMultipartFile(name,
-                originalFileName, contentType, content);
+        MultipartFile result = new MockMultipartFile(name, name, contentType,
+                name.getBytes());
         Assertions.assertNotNull(result);
-        when(awsService.searchFace (collectionName, result)).thenReturn(java.util.Optional.of((long) 1));
+        when(awsService.searchFace (collectionName, result)).thenReturn(Optional.of((long) 1));
         Optional<Long> id = awsService.searchFace (collectionName, result);
         verify(awsService, times(1)).searchFace(collectionName, result);
         assertThat(shelfService.putOnShelf(result, collectionName)).isNotNull();
@@ -51,16 +44,12 @@ public class ShelfServiceTest {
     @Test
     public void shouldTakeFromShelf() throws CustomerNotFoundException, IOException {
         String collectionName = "Carrefour";
-        Path path = Paths.get("sami.jpg");
         String name = "sami.jpg";
-        String originalFileName = "sami.jpg";
         String contentType = "image/jpg";
-        byte[] content = null;
-        content = readAllBytes(path);
-        MultipartFile result = new MockMultipartFile(name,
-                originalFileName, contentType, content);
+        MultipartFile result = new MockMultipartFile(name, name, contentType,
+                name.getBytes());
         Assertions.assertNotNull(result);
-        when(awsService.searchFace (collectionName, result)).thenReturn(java.util.Optional.of((long) 1));
+        when(awsService.searchFace (collectionName, result)).thenReturn(Optional.of((long) 1));
         Optional<Long> id = awsService.searchFace (collectionName, result);
         verify(awsService, times(1)).searchFace(collectionName, result);
         assertThat(shelfService.putOnShelf(result, collectionName)).isNotNull();

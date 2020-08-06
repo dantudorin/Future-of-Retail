@@ -26,7 +26,7 @@ public class AwsService {
     public Optional<Long> searchFace(String collectionName, MultipartFile userPhoto) throws CustomerNotFoundException {
         String message = "Customer not found";
         List<FaceMatch> foundedMatches = matchFace(collectionName, userPhoto);
-        if (foundedMatches.size() == Helper.PERSON_FOUND) {
+        if (foundedMatches.size() == 1) {
             return Optional.of(Long.parseLong(
                     foundedMatches.get(0).getFace().getExternalImageId()));
         }
@@ -34,7 +34,7 @@ public class AwsService {
     }
 
     public List<FaceMatch> matchFace(String collectionName, MultipartFile userPhoto){
-        ByteBuffer byteBuffer = ByteBuffer.allocate(Helper.EMPTY);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(0);
         try {
             byteBuffer = ByteBuffer.wrap(userPhoto.getBytes());
         } catch (IOException e) {
