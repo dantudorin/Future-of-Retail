@@ -9,6 +9,7 @@
     <modules>
         <module>admin-service</module>
         <module>gate-service</module>
+        <module>shelf-service</module>
     </modules>
 <build>
     <plugins>
