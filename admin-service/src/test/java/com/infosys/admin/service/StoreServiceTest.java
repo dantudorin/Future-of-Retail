@@ -89,7 +89,7 @@ class StoreServiceTest {
         StoreDTO storeDTO = createStoreDTO();
         Store store = converter.convertToModel(storeDTO);
 
-        when(awsService.createCollection(storeDTO.getName())).thenReturn(200);
+        when(awsService.createCollection(storeDTO.getName())).thenReturn(201);
 
         when(storeRepository.findById(ID)).thenReturn(Optional.empty());
         when(storeRepository.save(store)).thenReturn(store);

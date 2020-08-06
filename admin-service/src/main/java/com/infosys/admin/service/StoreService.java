@@ -51,7 +51,7 @@ public class StoreService {
 
     public StoreDTO createStore(StoreDTO storeDTO) throws NotCreatedException {
         Integer status = awsService.createCollection(storeDTO.getName());
-        if (HttpStatus.OK.value()!=status) {
+        if (HttpStatus.CREATED.value()!=status) {
 
             throw new NotCreatedException( "Store was not created!");
         }
@@ -64,11 +64,3 @@ public class StoreService {
         repository.deleteById(id);
     }
 }
-
-
-
-
-
-
-
-

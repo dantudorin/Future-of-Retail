@@ -28,10 +28,10 @@ public class StoreController {
 
 
     @PostMapping
-    private StoreDTO createStore(@RequestBody StoreDTO storeDTO) throws Exception {
-
+    public ResponseEntity<StoreDTO> createStore (@RequestBody StoreDTO storeDTO) throws Exception{
         try {
-            return service.createStore(storeDTO);
+            StoreDTO response = service.createStore(storeDTO);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
 
         } catch (ResourceAlreadyExistsException | InvalidParameterException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -68,32 +68,3 @@ public class StoreController {
         return ResponseEntity.accepted().build();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

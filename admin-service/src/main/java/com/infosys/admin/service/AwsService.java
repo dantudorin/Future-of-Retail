@@ -26,7 +26,3 @@ public class AwsService {
         return result.getStatusCode();
     }
 }
-
-
-
-
