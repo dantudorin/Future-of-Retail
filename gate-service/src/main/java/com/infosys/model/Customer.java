@@ -1,9 +1,6 @@
 package com.infosys.model;
 
-import org.springframework.context.annotation.Bean;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "customer")
@@ -16,24 +13,12 @@ public class Customer {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "customer_group_id", unique = true)
-    private String groupId;
-
-
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Face> storedFaces;
-
     public Customer() {
     }
 
-    public Customer(Long id, String name, String groupId, List<Face> storedFaces) {
+    public Customer(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.groupId = groupId;
-        this.storedFaces = storedFaces;
     }
 
     public Long getId() {
@@ -52,19 +37,4 @@ public class Customer {
         this.name = name;
     }
 
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
-
-    public List<Face> getStoredFaces() {
-        return storedFaces;
-    }
-
-    public void setStoredFaces(List<Face> storedFaces) {
-        this.storedFaces = storedFaces;
-    }
 }

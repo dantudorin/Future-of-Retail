@@ -1,119 +1,83 @@
 package com.infosys.controller;
 
-import com.amazonaws.services.rekognition.model.*;
-import com.infosys.exception.FaceNotExistsException;
-import com.infosys.exception.UserNotFoundException;
+import java.util.List;
+import java.util.HashMap;
+import java.io.IOException;
+import java.util.ArrayList;
 import com.infosys.model.Customer;
-import com.infosys.model.Face;
-import com.infosys.repository.CustomerRepository;
-import com.infosys.repository.FaceRepository;
-import com.infosys.service.AwsService;
-import com.infosys.utils.Helper;
-import com.infosys.utils.Response;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import com.infosys.collection.FaceCollection;
+import com.infosys.service.GateService;
 import org.springframework.http.HttpStatus;
+import com.infosys.requestModel.ExitRequest;
+import com.infosys.requestModel.EntryRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import com.infosys.repository.CustomerRepository;
+import com.infosys.exception.UserNotFoundException;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.awt.Image;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Controller
-@RequestMapping("/entry")
+@RequestMapping("/gate")
 public class GateController {
 
-    private FaceCollection faceCollection;
+    @Autowired
+    private GateService gateService;
 
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    private FaceRepository faceRepository;
 
-    @Autowired
-    private AwsService awsService;
+    @PostMapping("/create-customer")
+    public ResponseEntity createEntry(@RequestParam("customerName") String customerName,
+                                         @RequestParam("customerId") Long customerId){
 
-    @GetMapping("/get-collections")
-    private ResponseEntity getCollections() {
-        HashMap <String, Object> response = new HashMap<>();
-        List collections = awsService.getCollections();
+        HashMap<String, Object> response = new HashMap<>();
 
-        if(collections.size() == Helper.EMPTY) {
-            response.put(Response.MESSAGE, Response.EMPTY_LIST);
-            return new ResponseEntity(response, HttpStatus.OK);
+        if(customerRepository.findById(customerId).isPresent()) {
+            response.put("MESSAGE", "EXISTS");
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+
         }
 
-        response.put(Response.PAYLOAD, collections);
-        return new ResponseEntity(response, HttpStatus.OK);
+        Customer entrySaved = customerRepository.save(new Customer(customerId, customerName));
+        response.put("MESSAGE", "The Customer was created");
+        return new ResponseEntity(response, HttpStatus.CREATED);
 
     }
 
-    @PutMapping
-    public ResponseEntity<FaceCollection> updateCollection(@RequestBody Long id, Image image) {
-        faceCollection.updateFaceCollection(image, id);
-        return new ResponseEntity<FaceCollection>(HttpStatus.OK);
-    }
+    @PutMapping("/customer-entry")
+    private ResponseEntity customerEntry(@RequestParam("collectionName") String collectionName,
+                                         @RequestParam("customerId") Long customerId,
+                                         @RequestParam("photos") List<MultipartFile> photos) {
+        EntryRequest entryRequest = new EntryRequest(collectionName, customerId, new ArrayList<>());
+        photos.stream().forEach(face -> entryRequest.getPhotos().add(face));
 
-    @PostMapping("/upload-rekognition-photos")
-    private ResponseEntity uploadCustomerPhotos(@RequestParam("collectionName") String collectionName,
-                                                @RequestParam("groupId") String groupId,
-                                                @RequestParam("customerId") Long customerId,
-                                                @RequestParam("photos") List<MultipartFile> customerPhoto) {
-        Customer customer;
         try {
-            customer = customerRepository.findById(customerId)
-                    .orElseThrow(() -> new UserNotFoundException());
-            for(MultipartFile photo: customerPhoto){
-                String faceId = awsService.indexFace(collectionName, photo, groupId)
-                        .orElseThrow(() -> new FaceNotExistsException());
-                Face face = new Face(faceId, customer);
-                faceRepository.save(face);
-            }
-        } catch (UserNotFoundException | FaceNotExistsException e){
+            boolean indexed =  gateService.processEntryRequest(entryRequest);
+            if(!indexed)
+                return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+
+        } catch (UserNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
-        return null;
+        return new ResponseEntity(HttpStatus.OK);
     }
 
-    @DeleteMapping("/entry/{id}")
-    public ResponseEntity<FaceCollection> deleteEntryById(@PathVariable(value = "id") Long id) {
-        faceCollection.getFaceCollection().remove(id);
-        return ResponseEntity.accepted().build();
-    }
-
-    @DeleteMapping("/delete-customer")
-    public void deleteCustomer(@RequestParam(value = "groupId", required = true) String groupId,
-                               @RequestParam(value = "collectioname", required = true) String collectionName) {
+    @PutMapping("/customer-exit")
+    private ResponseEntity customerExit(@RequestParam("collectionName") String collectionName,
+                                        @RequestParam("customerId") Long customerId,
+                                        @RequestParam("photos") List<MultipartFile> photos) {
+        ExitRequest exitRequest = new ExitRequest(collectionName, customerId, photos);
         try {
-            Customer customer = customerRepository.findByGroupId(groupId)
-                    .orElseThrow(() -> new UserNotFoundException());
-
-            awsService.removeFromCollection(collectionName,
-                    customer.getStoredFaces()
-                            .stream()
-                            .map(face -> face.getFaceId())
-                            .collect(Collectors.toList())
-            );
-
-            customerRepository.delete(customer);
-
-        } catch (UserNotFoundException |
-                InvalidParameterException |
-                AccessDeniedException |
-                InternalServerErrorException |
-                ResourceNotFoundException e) {
-
-            e.printStackTrace();
-
+            gateService.processExitRequest(exitRequest);
+        } catch (UserNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
