@@ -1,15 +1,18 @@
 package com.infosys.admin.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import com.infosys.admin.exceptions.NotFoundException;
-import com.infosys.admin.repository.StoreRepository;
-import org.springframework.stereotype.Service;
 import com.infosys.admin.converter.Converter;
 import com.infosys.admin.dto.StoreDTO;
+import com.infosys.admin.exceptions.NotCreatedException;
 import com.infosys.admin.model.Store;
+import com.infosys.admin.repository.StoreRepository;
+import com.infosys.admin.exceptions.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StoreService {
@@ -18,21 +21,19 @@ public class StoreService {
     StoreRepository repository;
 
     @Autowired
+    AwsService awsService;
+
+    @Autowired
     Converter converter;
 
-    public StoreDTO add(StoreDTO storeDto) {
-        Store save = repository.save(converter.convertToModel(storeDto));
-
-        return converter.convertToDTO(save);
-    }
 
     public List<StoreDTO> findAll() {
         List<Store> storeList = repository.findAll();
         List<StoreDTO> storeDTOS = new ArrayList<>();
 
-        for (Store s : storeList)
-            storeDTOS.add(new StoreDTO(s.getName(), s.getLocation()));
-
+        for (Store s : storeList) {
+            storeDTOS.add(converter.convertToDTO(s));
+        }
         return storeDTOS;
     }
 
@@ -41,21 +42,21 @@ public class StoreService {
         Optional<Store> optionalStore = repository.findById(id);
 
         if (optionalStore.isPresent()) {
-            return new StoreDTO(optionalStore.get().getName(), optionalStore.get().getLocation());
+            return converter.convertToDTO(optionalStore.get());
         }
 
-        throw new NotFoundException("Store not found "+ id);
+        throw new NotFoundException("Store not found " + id);
     }
 
-    public StoreDTO updateStore(StoreDTO storeDTO) throws NotFoundException {
-        Optional<Store> optionalStore = repository.findById(storeDTO.getId());
 
-        if (!optionalStore.isPresent()) {
-            throw new NotFoundException("Nu exista un store cu id " + storeDTO.getId());
+    public StoreDTO createStore(StoreDTO storeDTO) throws NotCreatedException {
+        Integer status = awsService.createCollection(storeDTO.getName());
+        if (HttpStatus.CREATED.value()!=status) {
+
+            throw new NotCreatedException( "Store was not created!");
         }
 
-        Store s = optionalStore.get().updateFromDTO(storeDTO);
-        Store saved = repository.save(s);
+        Store saved = repository.save(converter.convertToModel(storeDTO));
         return converter.convertToDTO(saved);
     }
 

@@ -1,28 +1,42 @@
 package com.infosys.admin.controller;
 
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.infosys.admin.exceptions.NotFoundException;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import com.infosys.admin.service.StoreService;
-import org.springframework.http.HttpStatus;
+import com.amazonaws.services.rekognition.model.InvalidParameterException;
+import com.amazonaws.services.rekognition.model.ResourceAlreadyExistsException;
 import com.infosys.admin.dto.StoreDTO;
+import com.infosys.admin.exceptions.NotFoundException;
 import com.infosys.admin.model.Store;
+import com.infosys.admin.service.AwsService;
+import com.infosys.admin.service.StoreService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.HashMap;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/store")
 public class StoreController {
+
     @Autowired
     private StoreService service;
 
-    @PostMapping
-    public ResponseEntity<StoreDTO> createStore(@RequestBody StoreDTO storeDto) {
-        StoreDTO response = service.add(storeDto);
+    @Autowired
+    private AwsService awsService;
 
-        return new ResponseEntity<StoreDTO>(response, HttpStatus.CREATED);
+
+    @PostMapping
+    public ResponseEntity<StoreDTO> createStore (@RequestBody StoreDTO storeDTO) throws Exception{
+        try {
+            StoreDTO response = service.createStore(storeDTO);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+        } catch (ResourceAlreadyExistsException | InvalidParameterException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+
+        }
     }
 
     @GetMapping
@@ -32,27 +46,22 @@ public class StoreController {
         return responseEntity;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<StoreDTO> getStoreById(@PathVariable(value = "id") long id) {
         StoreDTO response;
+
         try {
             response = service.findStoreById(id);
+
         }catch (NotFoundException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
-        return new ResponseEntity<StoreDTO>(response, HttpStatus.FOUND);
-    }
-
-    @PutMapping
-    public ResponseEntity<StoreDTO> updateStore(@RequestBody StoreDTO storeDtoDetails) throws NotFoundException {
-        StoreDTO response = service.updateStore(storeDtoDetails);
-
-        return new ResponseEntity<StoreDTO>(HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete{id}")
     public ResponseEntity<Store> deleteStoreById(@PathVariable(value = "id") Long id) {
         service.deleteStoreById(id);
 
