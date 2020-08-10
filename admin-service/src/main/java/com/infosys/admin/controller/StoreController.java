@@ -31,7 +31,7 @@ public class StoreController {
     public ResponseEntity<StoreDTO> createStore (@RequestBody StoreDTO storeDTO) throws Exception{
         try {
             StoreDTO response = service.createStore(storeDTO);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (ResourceAlreadyExistsException | InvalidParameterException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
