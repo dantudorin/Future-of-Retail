@@ -1,17 +1,16 @@
 package com.infosys.config;
 
-import com.amazonaws.Protocol;
 import com.amazonaws.ClientConfiguration;
+import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.services.rekognition.AmazonRekognition;
+import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.amazonaws.services.rekognition.AmazonRekognition;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 
 @Configuration
 public class CustomerFactoryConfig {
-
     @Bean
     public AmazonRekognition getAmazonClient() {
         ClientConfiguration clientConfig = new ClientConfiguration();

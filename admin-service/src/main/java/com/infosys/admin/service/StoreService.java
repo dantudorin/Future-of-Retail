@@ -51,7 +51,7 @@ public class StoreService {
 
     public StoreDTO createStore(StoreDTO storeDTO) throws NotCreatedException {
         Integer status = awsService.createCollection(storeDTO.getName());
-        if (HttpStatus.CREATED.value()!=status) {
+        if (HttpStatus.OK.value()!=status) {
 
             throw new NotCreatedException( "Store was not created!");
         }
