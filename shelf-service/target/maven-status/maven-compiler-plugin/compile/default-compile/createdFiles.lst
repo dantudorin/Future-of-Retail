@@ -1,9 +1,0 @@
-com\infosys\config\ClientFactoryConfig.class
-com\infosys\service\ShelfService.class
-com\infosys\ShelfServiceApplication.class
-com\infosys\controller\ShelfController.class
-com\infosys\utils\CollectionDetails.class
-com\infosys\utils\Helper.class
-com\infosys\exceptions\CustomerNotFoundException.class
-com\infosys\service\AwsService.class
-com\infosys\utils\Response.class
