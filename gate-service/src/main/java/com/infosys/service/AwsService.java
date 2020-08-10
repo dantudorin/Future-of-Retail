@@ -1,85 +1,67 @@
 package com.infosys.service;
 
-import com.amazonaws.services.rekognition.AmazonRekognition;
-import com.amazonaws.services.rekognition.model.*;
-import com.infosys.config.CustomerFactoryConfig;
-import com.infosys.utils.CollectionDetails;
-import com.infosys.utils.Helper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
+import java.util.List;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import com.infosys.utils.AwsConstants;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import com.infosys.config.CustomerFactoryConfig;
+import org.springframework.stereotype.Component;
+import com.amazonaws.services.rekognition.model.*;
+import com.infosys.exception.FaceNotIndexedException;
+import org.springframework.web.multipart.MultipartFile;
+import com.amazonaws.services.rekognition.AmazonRekognition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Component
 public class AwsService {
 
     @Autowired
     private CustomerFactoryConfig clientFactoryConfig;
 
-    public List getCollections() {
-        ListCollectionsRequest request = new ListCollectionsRequest();
-        AmazonRekognition rekognition = clientFactoryConfig.getAmazonClient();
-        ListCollectionsResult result = rekognition.listCollections(request);
-
-        List collectionIds = result.getCollectionIds();
-
-        return collectionIds;
+    public AwsService(CustomerFactoryConfig clientFactoryConfig) {
+        this.clientFactoryConfig = clientFactoryConfig;
     }
 
-    public Integer createCollection(String collectionName) {
-        CreateCollectionRequest request = new CreateCollectionRequest()
-                .withCollectionId(collectionName);
-
-        AmazonRekognition rekognition = clientFactoryConfig.getAmazonClient();
-        CreateCollectionResult result = rekognition.createCollection(request);
-
-        return result.getStatusCode();
-    }
-
-    public Integer deleteCollection(String collectionName) {
-        DeleteCollectionRequest request = new DeleteCollectionRequest()
-                .withCollectionId(collectionName);
-        AmazonRekognition rekognition = clientFactoryConfig.getAmazonClient();
-        DeleteCollectionResult result = rekognition.deleteCollection(request);
-
-        return result.getStatusCode();
-    }
-
-    public Optional<String> indexFace(String collectionName, MultipartFile customerPhoto, String photoReconId) {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(Helper.EMPTY);
+    public boolean indexFace(String collectionName, MultipartFile customerPhoto, Long customerId) throws IOException{
+        ByteBuffer byteBuffer = ByteBuffer.allocate(AwsConstants.EMPTY);
         AmazonRekognition rekognition = clientFactoryConfig.getAmazonClient();
 
         try {
             byte[] bytePhoto = customerPhoto.getBytes();
             byteBuffer = ByteBuffer.wrap(bytePhoto);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IOException("Not permitted");
         }
 
         IndexFacesRequest request = new IndexFacesRequest()
                 .withCollectionId(collectionName)
-                .withDetectionAttributes(Helper.ALL)
+                .withDetectionAttributes(AwsConstants.ALL)
                 .withImage(new Image().withBytes(byteBuffer))
-                .withExternalImageId(photoReconId);
+                .withExternalImageId(customerId.toString());
 
         IndexFacesResult result = rekognition.indexFaces(request);
-        return result.getFaceRecords().stream().map(faceRecord -> faceRecord.getFace()
-                    .getFaceId()).findFirst();
+
+        if ((result.getFaceRecords().size() == 1) && (result.getUnindexedFaces().isEmpty())) {
+            return true;
+        } else{
+            FaceNotIndexedException e = new FaceNotIndexedException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
 
     public List<FaceMatch> matchFace(String collectionName, MultipartFile userPhoto) {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(Helper.EMPTY);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(AwsConstants.EMPTY);
 
         try {
             byteBuffer = ByteBuffer.wrap(userPhoto.getBytes());
         } catch (Exception e) {
-            System.out.println(e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
         SearchFacesByImageRequest request = new SearchFacesByImageRequest()
@@ -88,32 +70,21 @@ public class AwsService {
 
         AmazonRekognition rekognition = clientFactoryConfig.getAmazonClient();
         SearchFacesByImageResult result = rekognition.searchFacesByImage(request);
-
         return result.getFaceMatches();
     }
 
-    public HashMap getCollectionDetails(String collectioName) {
-        DescribeCollectionRequest request = new DescribeCollectionRequest()
-                .withCollectionId(collectioName);
-        AmazonRekognition rekognition = clientFactoryConfig.getAmazonClient();
-        DescribeCollectionResult result = rekognition.describeCollection(request);
+    public void removeFromCollection(String collectionName, Long customerId) {
 
-        HashMap<String, String> payload = new HashMap<>();
-
-        payload.put(CollectionDetails.ARN, result.getCollectionARN());
-        payload.put(CollectionDetails.CREATED_AT, String.valueOf(result.getCreationTimestamp()));
-        payload.put(CollectionDetails.FACE_MODEL_VERSION, result.getFaceModelVersion());
-        payload.put(CollectionDetails.FACE_COUNT, String.valueOf(result.getFaceCount()));
-
-        return payload;
-    }
-
-    public void removeFromCollection(String collectionName, List<String> faceIds) {
         AmazonRekognition amazonRekognition = clientFactoryConfig.getAmazonClient();
-        DeleteFacesRequest request = new DeleteFacesRequest()
-                .withCollectionId(collectionName)
-                .withFaceIds(faceIds);
+        ListFacesRequest request = new ListFacesRequest().withCollectionId(collectionName).withMaxResults(1000);
+        ListFacesResult response = amazonRekognition.listFaces(request);
 
-        amazonRekognition.deleteFaces(request);
+        List<Face> toDelete = response.getFaces().stream().filter(element-> element.getExternalImageId()
+                .equals(customerId.toString())).collect(Collectors.toList());
+
+        DeleteFacesRequest deleteFacesRequest = new DeleteFacesRequest()
+                    .withCollectionId(collectionName).withFaceIds(toDelete.stream()
+                    .map(faces->faces.getFaceId()).collect(Collectors.toList()));
+        DeleteFacesResult deleteFacesResult = amazonRekognition.deleteFaces(deleteFacesRequest);
     }
 }
