@@ -1,4 +1,5 @@
 .collectionFrame {
+    position: relative;
     height: 50px;
     width: 100%;
     border: 1px solid rgba(73, 125, 223, 0.719);
@@ -12,4 +13,30 @@
     position: relative;
     top: 50%;
     transform: translateY(-51%);
+}
+
+.nameLabel {
+    color: rgba(69, 89, 148, 0.781);
+    font-size: medium;
+    font-weight: 450;
+}
+
+.name {
+    color: rgb(24, 38, 77);
+}
+
+.textDivider {
+    margin-left: 20px;
+    margin-right: 20px;
+    border-left: 1px solid rgb(3, 54, 99);
+}
+
+.locationLabel {
+    color: rgba(69, 89, 148, 0.781);
+    font-size: medium;
+    font-weight: 450;
+}
+
+.location {
+    color: rgba(16, 22, 37, 0.788);
 }

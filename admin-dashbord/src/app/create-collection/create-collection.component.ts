@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CollectionService } from '../service/collection.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class CreateCollectionComponent implements OnInit {
   errorMessage = '';
   loading = false;
 
-  constructor(private collectionService: CollectionService, private formBuilder: FormBuilder) { }
+  constructor(private collectionService: CollectionService, private formBuilder: FormBuilder, private router : Router) { }
 
   ngOnInit(): void {
     this.collectionForm = this.formBuilder.group({
@@ -35,9 +36,8 @@ export class CreateCollectionComponent implements OnInit {
 
     this.collectionService.createCollection(newCollection).subscribe(
       collection => {
-        console.log("Subscribed got following payload: ");
-        console.log(collection);
         this.loading = false;
+        this.router.navigateByUrl('allCollections');
       },
       error => {
         this.loading = false;

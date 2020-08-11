@@ -11,16 +11,25 @@ import { Observable } from 'rxjs';
 export class CollectionListComponent implements OnInit {
   loading = false;
   errorMessage = '';
+  emptyList : boolean;
   collections: Collection[];
 
   constructor(private collectionService: CollectionService) { }
 
   ngOnInit(): void {
     this.loading = true;
+    this.emptyList = false;
     this.collectionService.getAllCollections()
       .subscribe(collections => {
         this.errorMessage = '';
-        this.collections = [...collections];
+        
+        if(collections.length > 0) {
+          this.collections = [...collections];
+          console.log(collections);
+        } else {
+          this.emptyList = true;
+        }
+      
         this.loading = false;
       },
         error => {

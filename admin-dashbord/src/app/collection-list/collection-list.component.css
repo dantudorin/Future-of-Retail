@@ -10,6 +10,19 @@
 }
 
 .listFrame {
+    position: relative;
     margin: auto;
-    width: 70%;
+    width: 40%;
+}
+
+.emptyListAlert {
+    width: 30%;
+    margin: auto;
+}
+
+.warnAlert {
+    display: flex;
+    justify-content: center;
+    background-color: bisque;
+    ;
 }
