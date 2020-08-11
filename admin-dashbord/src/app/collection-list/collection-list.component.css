@@ -1,0 +1,15 @@
+.pageLoadSpinner {
+    margin: auto;
+}
+
+.rowStyle {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100px;
+}
+
+.listFrame {
+    margin: auto;
+    width: 70%;
+}

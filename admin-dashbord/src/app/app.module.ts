@@ -12,12 +12,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { CollectionListComponent } from './collection-list/collection-list.component';
+import { CollectionItemComponent } from './collection-list/collection-item/collection-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateCollectionComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    CollectionListComponent,
+    CollectionItemComponent
   ],
   imports: [
     BrowserModule,

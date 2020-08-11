@@ -29,7 +29,7 @@ export class CreateCollectionComponent implements OnInit {
     this.loading = true;
     let newCollection = {
       name: this.collectionForm.value.name,
-      location: this.collectionForm.value.location
+      location: this.collectionForm.value.location,
     }
     console.log(newCollection);
 

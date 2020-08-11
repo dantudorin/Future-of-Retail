@@ -9,8 +9,8 @@ import { Collection } from '../model/collection';
 })
 export class CollectionService {
 
-  serverURL = 'http://localhost:8062';
-  createCollectionAPI = "/store";
+  serverURL = 'http://localhost:8082';
+  collectionAPI = "/store";
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json'
@@ -20,10 +20,14 @@ export class CollectionService {
   constructor(private http: HttpClient) { }
 
   createCollection(collection : Collection) : Observable<Collection> {
-    return this.http.post<Collection>(this.serverURL + this.createCollectionAPI, collection, this.httpOptions)
+    return this.http.post<Collection>(this.serverURL + this.collectionAPI, collection, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       )
+  }
+
+  getAllCollections() :Observable<Collection[]>{
+    return this.http.get<Collection[]>(this.serverURL + this.collectionAPI);
   }
 
   private handleError(error: HttpErrorResponse) {

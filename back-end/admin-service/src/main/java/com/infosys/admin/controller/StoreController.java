@@ -42,7 +42,7 @@ public class StoreController {
     @GetMapping
     public ResponseEntity<List<StoreDTO>> getAllStores() {
         List<StoreDTO> storesDto = service.findAll();
-        ResponseEntity<List<StoreDTO>> responseEntity = new ResponseEntity<List<StoreDTO>>(storesDto, HttpStatus.FOUND);
+        ResponseEntity<List<StoreDTO>> responseEntity = new ResponseEntity<List<StoreDTO>>(storesDto, HttpStatus.OK);
         return responseEntity;
     }
 
