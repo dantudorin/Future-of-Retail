@@ -1,0 +1,32 @@
+.pageLoadSpinner {
+    margin: auto;
+}
+
+.rowStyle {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100px;
+}
+
+.listFrame {
+    position: relative;
+    margin: auto;
+    width: 40%;
+}
+
+.emptyListAlert {
+    width: 30%;
+    margin: auto;
+}
+
+.warnAlert {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.errorMessage {
+    margin: auto;
+    width: 40%;
+}

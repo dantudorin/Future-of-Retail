@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+a.active {
+    background-color: #ffffff3d;
+    border-radius: 3px;
+    border : 1px solid #007cc3a8;
+}

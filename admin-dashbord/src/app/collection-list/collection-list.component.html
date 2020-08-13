@@ -1,0 +1,22 @@
+<div *ngIf="loading" class="row rowStyle">
+    <div class="pageLoadSpinner">
+        <app-spinner></app-spinner>
+    </div>
+</div>
+
+<ngb-alert *ngIf="errorMessage.length > 0" [dismissible]="false" type="danger" class="errorMessage">{{errorMessage}}</ngb-alert>
+
+<div *ngIf="emptyList; then emptyListBlock else listBlock"></div>
+<ng-template #listBlock>
+    <div class="listFrame">
+        <app-collection-item *ngFor="let collection of collections" [collection]="collection"></app-collection-item>
+    </div>
+</ng-template>
+
+<ng-template #emptyListBlock>
+    <div class="emptyListAlert">
+        <div class="alert alert-warning warnAlert" role="alert">
+            Collection list is empty.
+        </div>
+    </div>
+</ng-template>

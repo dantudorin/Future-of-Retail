@@ -1,0 +1,28 @@
+.formCard {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+    width: 300px;
+}
+
+.collectionForm {
+    display: inline-block;
+    width: 100%;
+}
+
+.textField {
+    display: block;
+    margin: 20px auto;
+}
+
+.formSpinner {
+    display: flex;
+    justify-content: center;
+}
+
+.formButton {
+    display: flex;
+    margin: auto;
+}

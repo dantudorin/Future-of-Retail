@@ -1,0 +1,42 @@
+<div class="col-sm-6 formCard">
+    <form [formGroup]="collectionForm" (ngSubmit)="onSubmit()" class="collectionForm">
+
+        <!-- Collection name input field -->
+        <mat-form-field class="textField">
+            <mat-label>Collection name</mat-label>
+            <input matInput formControlName="name" placeholder="Ex. Carrefour">
+            <mat-hint>Errors appear instantly!</mat-hint>
+            <mat-error
+                *ngIf="collectionForm.get('name').hasError('minlength') && !collectionForm.get('name').hasError('required')">
+                Collection name must be at least 5 characters long
+            </mat-error>
+            <mat-error *ngIf="collectionForm.get('name').hasError('required')">
+                Collection name is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Collection location input field -->
+        <mat-form-field class="textField">
+            <mat-label>Collection location</mat-label>
+            <input matInput formControlName="location" placeholder="Ex. Bucharest, Sector 6">
+            <mat-hint>Errors appear instantly!</mat-hint>
+            <mat-error
+                *ngIf="collectionForm.get('location').hasError('minlength') && !collectionForm.get('location').hasError('required')">
+                Collection location must be at least 5 characters long
+            </mat-error>
+            <mat-error *ngIf="collectionForm.get('location').hasError('required')">
+                Collection location is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Alert label for bad requests -->
+        <ngb-alert *ngIf="errorMessage.length > 0" [dismissible]="false" type="danger">{{errorMessage}}</ngb-alert>
+        <div class="formSpinner">
+            <app-spinner *ngIf="loading" ></app-spinner>
+        </div>
+        <!-- Collection form input button  -->
+        <button mat-raised-button color="primary" [disabled]="isDisabled()" class="formButton">Create
+            collection</button>
+
+    </form>
+</div>
