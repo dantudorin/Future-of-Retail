@@ -7,7 +7,6 @@ import com.amazonaws.services.rekognition.model.SearchFacesByImageRequest;
 import com.amazonaws.services.rekognition.model.SearchFacesByImageResult;
 import com.infosys.config.ClientFactoryConfig;
 import com.infosys.exceptions.CustomerNotFoundException;
-import com.infosys.utils.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +25,7 @@ public class AwsService {
     public Optional<Long> searchFace(String collectionName, MultipartFile userPhoto) throws CustomerNotFoundException {
         String message = "Customer not found";
         List<FaceMatch> foundedMatches = matchFace(collectionName, userPhoto);
-        if (foundedMatches.size() == 1) {
+        if (foundedMatches.size() > 0) {
             return Optional.of(Long.parseLong(
                     foundedMatches.get(0).getFace().getExternalImageId()));
         }

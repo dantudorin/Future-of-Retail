@@ -13,21 +13,24 @@ export class CollectionService {
   collectionAPI = "/store";
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type':  'application/json'
+      'Content-Type': 'application/json'
     })
   };
 
   constructor(private http: HttpClient) { }
 
-  createCollection(collection : Collection) : Observable<Collection> {
+  createCollection(collection: Collection): Observable<Collection> {
     return this.http.post<Collection>(this.serverURL + this.collectionAPI, collection, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       )
   }
 
-  getAllCollections() :Observable<Collection[]>{
-    return this.http.get<Collection[]>(this.serverURL + this.collectionAPI);
+  getAllCollections(): Observable<Collection[]> {
+    return this.http.get<Collection[]>(this.serverURL + this.collectionAPI)
+      .pipe(
+        catchError(this.handleError)
+      )
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -38,7 +41,7 @@ export class CollectionService {
     }
 
     return throwError(
-      'Something bad happened; please try again later'
+      'Something bad happened; Please try again later.'
     );
   }
 }

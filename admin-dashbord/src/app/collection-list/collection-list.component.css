@@ -23,6 +23,10 @@
 .warnAlert {
     display: flex;
     justify-content: center;
-    background-color: bisque;
-    ;
+    
+}
+
+.errorMessage {
+    margin: auto;
+    width: 40%;
 }

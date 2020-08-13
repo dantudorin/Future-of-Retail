@@ -41,7 +41,7 @@ export class CreateCollectionComponent implements OnInit {
       },
       error => {
         this.loading = false;
-        this.errorMessage = error
+        this.errorMessage = error;
       });
   }
 

@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { CollectionItemComponent } from './collection-list/collection-item/collection-item.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     SpinnerComponent,
     CollectionItemComponent,
     NavbarComponent,
-    routingComponents
+    routingComponents,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

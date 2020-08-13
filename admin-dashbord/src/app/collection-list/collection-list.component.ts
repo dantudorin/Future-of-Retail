@@ -19,6 +19,8 @@ export class CollectionListComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.emptyList = false;
+    this.errorMessage = '';
+
     this.collectionService.getAllCollections()
       .subscribe(collections => {
         this.errorMessage = '';

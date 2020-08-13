@@ -3,6 +3,9 @@
         <app-spinner></app-spinner>
     </div>
 </div>
+
+<ngb-alert *ngIf="errorMessage.length > 0" [dismissible]="false" type="danger" class="errorMessage">{{errorMessage}}</ngb-alert>
+
 <div *ngIf="emptyList; then emptyListBlock else listBlock"></div>
 <ng-template #listBlock>
     <div class="listFrame">

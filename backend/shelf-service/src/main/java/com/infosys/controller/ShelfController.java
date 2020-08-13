@@ -23,11 +23,11 @@ public class ShelfController {
                                      @RequestParam(value = "storeName") String storeName) {
         try {
             Optional<Long> entity = awsService.searchFace (storeName, photo);
+            return new ResponseEntity(HttpStatus.OK);
         } catch(CustomerNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     e.getMessage(), e);
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/take")

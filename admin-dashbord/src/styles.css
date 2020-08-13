@@ -11,5 +11,7 @@ body {
 }
 
 a.active {
-    background-color: bisque;
+    background-color: #ffffff3d;
+    border-radius: 3px;
+    border : 1px solid #007cc3a8;
 }
