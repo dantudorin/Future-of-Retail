@@ -1,38 +1,16 @@
 .footer {
-    height: 70px;
+    height: 40px;
     width: 100%;
-    background-color: #eff6ff;
-    border-top: 1px solid #84b0cafa;
+    background-color: #007cc3;
     position: fixed;
     bottom: 0;
+    text-align: center;
 }
 
-.footerIconsContent {
-    display: flex;
-    justify-content: center;
+.footer p {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
-}
-
-.footerIconsContent h3 {
-    margin: 0px 20px;
-    color: rgb(48, 79, 110);
-    font-weight: 450;
-}
-.iconStyle {
-    width: 30px;
-    height: 30px;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 1px solid aliceblue;
-    outline: none;
-    border: none;
-    margin-right: 20px;
-}
-
-.iconStyle:hover {
-    padding: 0.2px;
-    border-bottom: 2px solid rgb(226, 125, 2);
+    color: aliceblue;
+    font-weight: 500;
 }
