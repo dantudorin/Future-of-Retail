@@ -7,6 +7,10 @@ import com.infosys.admin.model.Store;
 import com.infosys.admin.repository.StoreRepository;
 import com.infosys.admin.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +31,16 @@ public class StoreService {
     Converter converter;
 
 
-    public List<StoreDTO> findAll() {
-        List<Store> storeList = repository.findAll();
+    public List<StoreDTO> findAll(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo-1,pageSize, Sort.by(sortBy));
+        Page<Store> storepage = repository.findAll(pageable);
+        List<Store> storeList= storepage.getContent();
+
+        Long totalStores= storepage.getTotalElements();
+        Integer totalPages= storepage.getTotalPages();
+        System.out.println("totalStores "+ totalStores.toString()+ "totalPages "+ totalPages.toString());
+
+
         List<StoreDTO> storeDTOS = new ArrayList<>();
 
         for (Store s : storeList) {
