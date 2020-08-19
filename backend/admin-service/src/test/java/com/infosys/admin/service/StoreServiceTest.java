@@ -52,7 +52,7 @@ class StoreServiceTest {
         when(storeRepository.findAll()).thenReturn(Arrays.asList(store));
         when(converter.convertToDTO(eq(store))).thenReturn(storeDTO);
 
-        List<StoreDTO> result = storeService.findAll();
+        List<StoreDTO> result = storeService.findAll(0,2,"id");
         verify(converter, times(1)).convertToDTO(any());
         assertEquals(storeDTO, result.get(0));
     }
