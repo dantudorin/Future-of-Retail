@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "stores")
 public class Store {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO, generator = "native")
@@ -19,18 +20,38 @@ public class Store {
 
     private Date createdAt;
 
-    public Store() { }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_tracker_id", referencedColumnName = "id")
+    private CustomerTracker customerTracker;
 
+    public Store() {
+    }
 
     public Store(String name, String location, Date date) {
         this.name = name;
         this.location  = location;
-        createdAt = date;
+        this.createdAt = date;
+        this.customerTracker = new CustomerTracker();
     }
 
     public Store(String name, String location) {
         this.name = name;
         this.location  = location;
+        this.customerTracker = new CustomerTracker();
+    }
+
+    public Store(String name, String location, CustomerTracker customerTracker) {
+        this.name = name;
+        this.location = location;
+        this.customerTracker = customerTracker;
+    }
+
+    public CustomerTracker getCustomerTracker() {
+        return customerTracker;
+    }
+
+    public void setCustomerTracker(CustomerTracker customerTracker) {
+        this.customerTracker = customerTracker;
     }
 
     public void setId(Long id) {

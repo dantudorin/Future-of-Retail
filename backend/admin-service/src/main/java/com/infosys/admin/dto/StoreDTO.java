@@ -1,23 +1,47 @@
 package com.infosys.admin.dto;
 
+import com.infosys.admin.model.CustomerTracker;
+
 public class StoreDTO {
 
-    String location;
-    String name;
-    Long id;
+    private CustomerTracker customerTracker;
+    private String location;
+    private String name;
+    private Long id;
 
-    public StoreDTO() {
+    public StoreDTO() { }
+
+    public StoreDTO(String location, String name) {
+        this.location = location;
+        this.name = name;
+        this.customerTracker = new CustomerTracker();
     }
 
-    public StoreDTO(Long id,String name, String location) {
+    public StoreDTO(Long id, String name, String location, CustomerTracker customerTracker) {
         this.name = name;
         this.location = location;
         this.id = id;
+        this.customerTracker = customerTracker;
     }
 
-    public StoreDTO(String name, String location) {
+    public StoreDTO(String name, String location, CustomerTracker customerTracker) {
         this.name = name;
         this.location = location;
+        this.customerTracker = customerTracker;
+    }
+
+    public StoreDTO(Long id, String name, String location) {
+        this.id = id;
+        this.name = name;
+        this.location = location;
+    }
+
+    public CustomerTracker getCustomerTracker() {
+        return customerTracker;
+    }
+
+    public void setCustomerTracker(CustomerTracker customerTracker) {
+        this.customerTracker = customerTracker;
     }
 
     public void setId(Long id) {
