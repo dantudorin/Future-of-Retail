@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,7 +123,7 @@ class StoreServiceTest {
 
 
     private Store createStore() {
-        Store store = new Store();
+        Store store = new Store(null, null);
         return store;
     }
 

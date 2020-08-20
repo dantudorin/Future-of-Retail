@@ -14,7 +14,7 @@ public class Converter {
     }
 
     public StoreDTO convertToDTO(Store store) {
-        StoreDTO storeDto = new StoreDTO(store.getName(), store.getLocation());
+        StoreDTO storeDto = new StoreDTO(store.getName(), store.getLocation(), store.getCustomerTracker());
         storeDto.setId(store.getId());
 
         return storeDto;
