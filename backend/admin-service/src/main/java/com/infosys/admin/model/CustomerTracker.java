@@ -54,4 +54,14 @@ public class CustomerTracker {
     public void setAllTimeCustomers(int allTimeCustomers) {
         this.allTimeCustomers = allTimeCustomers;
     }
+
+    @Override
+    public String toString() {
+        return "CustomerTracker{" +
+                "id=" + id +
+                ", nowInStore=" + nowInStore +
+                ", totalOfTheDay=" + totalOfTheDay +
+                ", allTimeCustomers=" + allTimeCustomers +
+                '}';
+    }
 }
