@@ -1,4 +1,4 @@
-package com.infosys.requestModel;
+package com.infosys.gate.requestModel;
 
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;

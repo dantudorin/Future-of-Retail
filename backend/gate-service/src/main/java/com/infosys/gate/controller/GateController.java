@@ -1,24 +1,24 @@
-package com.infosys.controller;
+package com.infosys.gate.controller;
 
 import java.util.List;
 import java.util.HashMap;
-import java.io.IOException;
 import java.util.ArrayList;
-import com.infosys.model.Customer;
-import com.infosys.service.GateService;
+
+import com.infosys.gate.model.Customer;
+import com.infosys.gate.repository.CustomerRepository;
+import com.infosys.gate.requestModel.EntryRequest;
+import com.infosys.gate.requestModel.ExitRequest;
+import com.infosys.gate.service.GateService;
+import com.infosys.admin.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
-import com.infosys.requestModel.ExitRequest;
-import com.infosys.requestModel.EntryRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import com.infosys.repository.CustomerRepository;
-import com.infosys.exception.UserNotFoundException;
+import com.infosys.gate.exception.UserNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.server.ResponseStatusException;
 
-@Controller
+@RestController
 @RequestMapping("/gate")
 public class GateController {
 
@@ -59,7 +59,7 @@ public class GateController {
             if(!indexed)
                 return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException | NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
@@ -73,7 +73,7 @@ public class GateController {
         ExitRequest exitRequest = new ExitRequest(collectionName, customerId, photos);
         try {
             gateService.processExitRequest(exitRequest);
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException | NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 

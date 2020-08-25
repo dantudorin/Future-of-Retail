@@ -1,4 +1,4 @@
-package com.infosys.exception;
+package com.infosys.gate.exception;
 
 public class UserNotFoundException extends Exception{
 

@@ -1,4 +1,4 @@
-package com.infosys.model;
+package com.infosys.gate.model;
 
 import javax.persistence.*;
 

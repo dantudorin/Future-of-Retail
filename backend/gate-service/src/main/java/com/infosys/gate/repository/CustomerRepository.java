@@ -1,7 +1,8 @@
-package com.infosys.repository;
+package com.infosys.gate.repository;
 
 import java.util.Optional;
-import com.infosys.model.Customer;
+
+import com.infosys.gate.model.Customer;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
