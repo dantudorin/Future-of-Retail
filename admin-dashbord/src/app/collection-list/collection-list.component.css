@@ -9,6 +9,25 @@
     height: 100px;
 }
 
+.form-group {
+  position: relative;
+  left: 700px;
+  margin: auto;
+  width: 10%;
+}
+
+.listFrame {
+  position: relative;
+  margin: auto;
+  width: 30%;
+}
+
+.pagination {
+  position: relative;
+  margin: auto;
+  width: 100%;
+}
+
 .listFrame {
     position: relative;
     margin: auto;
