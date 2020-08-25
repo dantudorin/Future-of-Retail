@@ -20,13 +20,13 @@ public class CustomerTrackingSchedulerConfig {
     @Autowired
     private CustomerTrackerRepository customerTrackerRepository;
 
-    @Scheduled(fixedRate = StoreConstants.ONE_MINUTE)
+    @Scheduled(fixedRate = StoreConstants.ONE_MINUTE * 60)
     public void resetCustomersAsync() {
-//        List<CustomerTracker> customerTrackers = customerTrackerRepository.findAll();
-//        customerTrackers.forEach(customerTracker -> {
-//            customerTracker.setNowInStore(StoreConstants.EMPTY);
-//            customerTracker.setTotalOfTheDay(StoreConstants.EMPTY);
-//        });
-//        customerTrackerRepository.saveAll(customerTrackers);
+        List<CustomerTracker> customerTrackers = customerTrackerRepository.findAll();
+        customerTrackers.forEach(customerTracker -> {
+            customerTracker.setNowInStore(StoreConstants.EMPTY);
+            customerTracker.setTotalOfTheDay(StoreConstants.EMPTY);
+        });
+        customerTrackerRepository.saveAll(customerTrackers);
     }
 }
