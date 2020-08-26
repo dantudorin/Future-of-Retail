@@ -17,8 +17,8 @@ public class WebSocketStoreController {
     @Autowired
     private StoreService storeService;
 
-    @MessageMapping("/get-all-stores")
-    @SendTo("/customers-update")
+    @MessageMapping("/update")
+    @SendTo("/topic/updatecustomers")
     public List<StoreDTO> getAllStores(PaginationDataDTO paginationData) {
        return storeService.findAll(paginationData.getPageNo(), paginationData.getPageSize(), paginationData.getSortBy());
     }
