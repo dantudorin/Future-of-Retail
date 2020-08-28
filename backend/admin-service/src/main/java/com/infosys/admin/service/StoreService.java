@@ -31,21 +31,17 @@ public class StoreService {
     Converter converter;
 
 
-    public List<StoreDTO> findAll(Integer pageNo, Integer pageSize, String sortBy) {
+    public List<StoreDTO> findByPage(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNo-1,pageSize, Sort.by(sortBy));
-        Page<Store> storepage = repository.findAll(pageable);
-        List<Store> storeList= storepage.getContent();
-
-        Long totalStores= storepage.getTotalElements();
-        Integer totalPages= storepage.getTotalPages();
-        System.out.println("totalStores "+ totalStores.toString()+ "totalPages "+ totalPages.toString());
-
+        Page<Store> storePage = repository.findAll(pageable);
+        List<Store> storeList= storePage.getContent();
 
         List<StoreDTO> storeDTOS = new ArrayList<>();
 
-        for (Store s : storeList) {
-            storeDTOS.add(converter.convertToDTO(s));
-        }
+        storeList.stream().forEach( store -> {
+            storeDTOS.add(converter.convertToDTO(store));
+        });
+
         return storeDTOS;
     }
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CollectionService } from '../service/collection.service';
 import { Collection } from '../model/collection';
 import { Observable } from 'rxjs';
+import { NumberItems } from '../model/numberItems'
+
 
 @Component({
   selector: 'app-collection-list',
@@ -13,6 +15,14 @@ export class CollectionListComponent implements OnInit {
   errorMessage = '';
   emptyList : boolean;
   collections: Collection[];
+  searchByName: string = "";
+
+  page: Number = 1
+  items: Number = 1
+  selectBy = "id"
+  numberSelected: any = {};
+  numberItems: NumberItems[];
+
 
   constructor(private collectionService: CollectionService) { }
 
@@ -20,8 +30,15 @@ export class CollectionListComponent implements OnInit {
     this.loading = true;
     this.emptyList = false;
     this.errorMessage = '';
+    this.numberItems = [
+      { number: 1 },
+      { number: 2 },
+      { number: 3 },
+      { number: 4 },
+      { number: 5 },
+    ];
 
-    this.collectionService.getAllCollections()
+    this.collectionService.getCollectionFromPage(this.page, this.items, this.selectBy)
       .subscribe(collections => {
         this.errorMessage = '';
         
@@ -38,5 +55,8 @@ export class CollectionListComponent implements OnInit {
           this.loading = false;
           this.errorMessage = error;
         });
+  }
+  onNumberSelected(val: NumberItems) {
+    this.items = val.number;
   }
 }

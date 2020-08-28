@@ -15,6 +15,8 @@ import { CollectionItemComponent } from './collection-list/collection-item/colle
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     NgbModule,
     MatButtonModule,
     HttpClientModule,
+    NgxPaginationModule,
+    Ng2SearchPipeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

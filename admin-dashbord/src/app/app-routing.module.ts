@@ -4,12 +4,12 @@ import { CollectionListComponent } from './collection-list/collection-list.compo
 import { CreateCollectionComponent } from './create-collection/create-collection.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 const routes: Routes = [
-  {
+  { 
     path : '',
     redirectTo : 'allCollections',
     pathMatch : 'full'
   },
-  {
+  { 
     path : 'allCollections', 
     component : CollectionListComponent
   },

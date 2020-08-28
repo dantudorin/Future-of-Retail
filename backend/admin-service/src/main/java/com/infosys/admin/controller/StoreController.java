@@ -39,19 +39,13 @@ public class StoreController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<StoreDTO>> getAllStores()
-    {
-        return getStoresByPage(1,2, "id");
-    }
-
     @GetMapping("/page/{pageNumber}")
     public ResponseEntity< List<StoreDTO>> getStoresByPage(
             @PathVariable(value = "pageNumber") Integer pageNo,
             @RequestParam(defaultValue = "2") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy)
     {
-        List<StoreDTO> storesDto = service.findAll(pageNo, pageSize, sortBy);
+        List<StoreDTO> storesDto = service.findByPage(pageNo, pageSize, sortBy);
         ResponseEntity<List<StoreDTO>> responseEntity = new ResponseEntity<List<StoreDTO>>(storesDto, HttpStatus.OK);
         return responseEntity;
     }

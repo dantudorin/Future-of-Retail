@@ -13,11 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.*;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,6 +30,10 @@ class StoreServiceTest {
     private static final String NAME = String.valueOf(1);
     private static final Long ID = 1L;
     private static final String LOCATION = "LOCATION";
+    private static final Integer pageTest=1;
+    private static final Integer sizeTest=1;
+    private static final String sortByTest="id";
+
     @Mock
     AwsService awsService;
 
@@ -46,16 +48,20 @@ class StoreServiceTest {
 
 
     @Test
-    void shouldFindAll() {
-        Store store = createStore();
+    void shouldFindByPage() {
+        Store store=new Store();
         StoreDTO storeDTO = createStoreDTO();
 
-        when(storeRepository.findAll()).thenReturn(Arrays.asList(store));
+        Pageable pageable = PageRequest.of(pageTest-1,sizeTest, Sort.by(sortByTest));
+        Page<Store> storePage = new PageImpl<>(Collections.singletonList(store));
+        when(storeRepository.findAll(pageable)).thenReturn(storePage);
+        assertEquals(storePage.getNumberOfElements(), 1);
         when(converter.convertToDTO(eq(store))).thenReturn(storeDTO);
 
-        List<StoreDTO> result = storeService.findAll(0,2,"id");
+        List<StoreDTO> result = storeService.findByPage(pageTest, sizeTest, sortByTest);
         verify(converter, times(1)).convertToDTO(any());
-        assertEquals(storeDTO, result.get(0));
+        assertEquals(storeDTO,result.get(0));
+
     }
 
     @Test

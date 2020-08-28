@@ -11,6 +11,7 @@ export class CollectionService {
 
   serverURL = 'http://localhost:8082';
   collectionAPI = "/store";
+  PageAPI = "/page/";
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -26,8 +27,8 @@ export class CollectionService {
       )
   }
 
-  getAllCollections(): Observable<Collection[]> {
-    return this.http.get<Collection[]>(this.serverURL + this.collectionAPI)
+  getCollectionFromPage(pageNumber: Number = 1, pageSize: Number = 1, sortBy: String = "id"): Observable<Collection[]> {
+    return this.http.get<Collection[]>(this.serverURL + this.collectionAPI + this.PageAPI + pageNumber.toString())
       .pipe(
         catchError(this.handleError)
       )
