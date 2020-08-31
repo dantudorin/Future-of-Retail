@@ -9,10 +9,6 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication()
-//@ComponentScan(basePackages = {
-//		"com.infosys",
-//		"com.infosys.admin.config",
-//})
 @EnableJpaRepositories(basePackages = {"com.infosys.gate.repository", "com.infosys.admin.repository"})
 @EntityScan(basePackages = {"com.infosys.gate.model", "com.infosys.admin.model"})
 @ComponentScan(basePackages = {"com.infosys.gate"})
