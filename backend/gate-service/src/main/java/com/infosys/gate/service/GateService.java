@@ -1,10 +1,12 @@
-package com.infosys.service;
+package com.infosys.gate.service;
 
-import com.infosys.exception.UserNotFoundException;
-import com.infosys.model.Customer;
-import com.infosys.repository.CustomerRepository;
-import com.infosys.requestModel.EntryRequest;
-import com.infosys.requestModel.ExitRequest;
+import com.infosys.gate.model.Customer;
+import com.infosys.gate.requestModel.EntryRequest;
+import com.infosys.gate.requestModel.ExitRequest;
+import com.infosys.admin.exceptions.NotFoundException;
+import com.infosys.gate.exception.UserNotFoundException;
+import com.infosys.gate.repository.CustomerRepository;
+import com.infosys.gate.utils.AwsConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,10 @@ public class GateService {
     @Autowired
     private AwsService awsService;
 
-    public boolean processEntryRequest(EntryRequest entryRequest) throws UserNotFoundException {
+    @Autowired
+    private CustomerTrackerService customerTrackerService;
+
+    public boolean processEntryRequest(EntryRequest entryRequest) throws UserNotFoundException, NotFoundException {
         Customer customer = customerRepository.findById(entryRequest.getCustomerId())
                 .orElseThrow(() ->new UserNotFoundException(entryRequest.getCustomerId()));
 
@@ -35,13 +40,16 @@ public class GateService {
             }
         });
 
+        customerTrackerService.updateCustomerNumber(entryRequest.getCollectionName(), AwsConstants.ONE_CUSTOMER);
+
         return true;
     }
 
-    public void processExitRequest (ExitRequest exitRequest) throws UserNotFoundException {
+    public void processExitRequest (ExitRequest exitRequest) throws UserNotFoundException, NotFoundException {
             Customer customer = customerRepository.findById(exitRequest.getCustomerId())
                     .orElseThrow(() -> new UserNotFoundException(exitRequest.getCustomerId()));
 
-            awsService.removeFromCollection(exitRequest.getCollectionName(), exitRequest.getCustomerId());
+           awsService.removeFromCollection(exitRequest.getCollectionName(), exitRequest.getCustomerId());
+           customerTrackerService.decrementCustomers(exitRequest.getCollectionName(), AwsConstants.ONE_CUSTOMER);
     }
 }

@@ -1,11 +1,14 @@
 package com.infosys.service;
 
-import com.infosys.GateServiceApplication;
-import com.infosys.exception.UserNotFoundException;
-import com.infosys.model.Customer;
-import com.infosys.repository.CustomerRepository;
-import com.infosys.requestModel.EntryRequest;
-import com.infosys.requestModel.ExitRequest;
+import com.infosys.gate.GateServiceApplication;
+import com.infosys.gate.service.AwsService;
+import com.infosys.gate.service.GateService;
+import com.infosys.admin.exceptions.NotFoundException;
+import com.infosys.gate.exception.UserNotFoundException;
+import com.infosys.gate.model.Customer;
+import com.infosys.gate.repository.CustomerRepository;
+import com.infosys.gate.requestModel.EntryRequest;
+import com.infosys.gate.requestModel.ExitRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -35,7 +38,7 @@ public class GateServiceTest {
     private AwsService awsService;
 
     @Test
-    public void processEntryRequestTest() throws IOException, UserNotFoundException {
+    public void processEntryRequestTest() throws IOException, UserNotFoundException, NotFoundException {
         EntryRequest entryRequest;
         String collectionName = "Carrefour";
         Long customerId = Long.valueOf(1);
@@ -61,7 +64,7 @@ public class GateServiceTest {
     }
 
     @Test
-    public void processExistRequestTest() throws IOException, UserNotFoundException {
+    public void processExistRequestTest() throws IOException, UserNotFoundException, NotFoundException {
         Customer customer;
         ExitRequest exitRequest;
         List<MultipartFile> photos = new ArrayList<>();

@@ -1,16 +1,17 @@
-package com.infosys.service;
+package com.infosys.gate.service;
 
 import java.util.List;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.stream.Collectors;
-import com.infosys.utils.AwsConstants;
+
+import com.infosys.gate.utils.AwsConstants;
+import com.infosys.admin.config.CustomerFactoryConfig;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import com.infosys.config.CustomerFactoryConfig;
 import org.springframework.stereotype.Component;
 import com.amazonaws.services.rekognition.model.*;
-import com.infosys.exception.FaceNotIndexedException;
+import com.infosys.gate.exception.FaceNotIndexedException;
 import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +87,6 @@ public class AwsService {
                     .withCollectionId(collectionName).withFaceIds(toDelete.stream()
                     .map(faces->faces.getFaceId()).collect(Collectors.toList()));
         DeleteFacesResult deleteFacesResult = amazonRekognition.deleteFaces(deleteFacesRequest);
+
     }
 }

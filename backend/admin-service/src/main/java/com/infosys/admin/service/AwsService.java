@@ -6,7 +6,7 @@ import com.infosys.admin.config.CustomerFactoryConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("awsAdmin")
 public class AwsService {
 
 
