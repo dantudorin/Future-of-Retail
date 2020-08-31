@@ -21,7 +21,7 @@ public class CustomerTrackingSchedulerConfig {
     private CustomerTrackerRepository customerTrackerRepository;
 
     @Scheduled(fixedRate = StoreConstants.ONE_MINUTE * 60)
-    public void resetCustomersAsync() {
+    public void resetCustomersSync() {
         List<CustomerTracker> customerTrackers = customerTrackerRepository.findAll();
         customerTrackers.forEach(customerTracker -> {
             customerTracker.setNowInStore(StoreConstants.EMPTY);
