@@ -1,42 +1,39 @@
 .collectionFrame {
-    position: relative;
-    height: 50px;
-    width: 100%;
+    /* position: relative; */
+    height: auto;
+    width: auto;
     border: 1px solid rgba(73, 125, 223, 0.719);
     text-align: center;
     margin: 10px;
     padding: 10px;
     box-shadow: 3px 2px #cececed2;
+    padding: 5px;
 }
 
-.collectionFrame h3 {
-    position: relative;
-    top: 50%;
-    transform: translateY(-51%);
+
+.customerTrackerBox {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    margin-top: 10px;
 }
 
-.nameLabel {
-    color: rgba(69, 89, 148, 0.781);
-    font-size: medium;
+.customerTrackerBox p {
+    line-height: 5pt;
+}
+
+.labelStyle {
+    color : rgba(138, 139, 139, 0.932);
     font-weight: 450;
+    font-size: small;
 }
 
-.name {
-    color: rgb(24, 38, 77);
+.dataStyle {
+    color: rgba(64, 89, 136, 0.808);
+    font-weight: 550;
 }
 
-.textDivider {
-    margin-left: 20px;
-    margin-right: 20px;
-    border-left: 1px solid rgb(3, 54, 99);
-}
-
-.locationLabel {
-    color: rgba(69, 89, 148, 0.781);
-    font-size: medium;
-    font-weight: 450;
-}
-
-.location {
-    color: rgba(16, 22, 37, 0.788);
+.divider {
+    margin: 20px;
+    border-left: 2px solid rgba(73, 125, 223, 0.719);
 }

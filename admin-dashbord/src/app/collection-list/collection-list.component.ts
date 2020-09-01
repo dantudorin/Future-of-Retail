@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CollectionService } from '../service/collection.service';
 import { Collection } from '../model/collection';
 import { Observable } from 'rxjs';
-import { NumberItems } from '../model/numberItems'
+import { NumberItems } from '../model/numberItems';
 
 
 @Component({
