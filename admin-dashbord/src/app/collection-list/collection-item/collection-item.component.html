@@ -1,7 +1,12 @@
 <div class="collectionFrame">
     <h3>
-        <span class="nameLabel">Name: </span><span class="name">{{collection.name}}</span>
-        <span class="textDivider"></span>
-        <span class="locationLabel"> Location: </span><span class="location">{{collection.location}}</span>
+        <span class="labelStyle">Name: </span><span class="dataStyle">{{collection.name}}</span>
+        <span class="divider"></span>
+        <span class="labelStyle"> Location: </span><span class="dataStyle">{{collection.location}}</span>
+        <div class="customerTrackerBox">
+            <p><span class="labelStyle"> Customers in store: </span><span class="dataStyle">{{collection.customerTracker.nowInStore}}</span></p>
+            <p><span class="labelStyle"> Total customers for today: </span><span class="dataStyle">{{collection.customerTracker.totalOfTheDay}}</span></p>
+            <p><span class="labelStyle"> All customers in store: </span><span class="dataStyle">{{collection.customerTracker.allTimeCustomers}}</span></p>
+        </div>
     </h3>
 </div>
