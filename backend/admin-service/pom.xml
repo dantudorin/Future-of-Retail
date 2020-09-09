@@ -18,11 +18,12 @@
 	</properties>
 
 	<dependencies>
-
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-rekognition</artifactId>
@@ -75,7 +76,14 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-		</plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+<!--					<configuration>-->
+<!--						<testFailureIgnore>true</testFailureIgnore>-->
+<!--					</configuration>-->
+				</plugin>
+			</plugins>
 	</build>
 
 </project>
