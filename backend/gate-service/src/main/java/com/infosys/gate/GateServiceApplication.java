@@ -1,6 +1,5 @@
 package com.infosys.gate;
 
-import com.infosys.admin.config.H2DatabaseConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -14,8 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = {"com.infosys.gate"})
 @ComponentScan(basePackages = {"com.infosys.admin.config"},
 		excludeFilters = {@ComponentScan.Filter(
-				type = FilterType.ASSIGNABLE_TYPE,
-				value = {H2DatabaseConfig.class})
+				type = FilterType.ASSIGNABLE_TYPE
+			)
 		})
 public class GateServiceApplication {
 

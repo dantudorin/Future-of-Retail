@@ -1,6 +1,5 @@
 package com.infosys.admin.model;
 
-import com.infosys.admin.dto.StoreDTO;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
