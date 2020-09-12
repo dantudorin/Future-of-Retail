@@ -1,28 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { CollectionService } from '../service/collection.service';
 import { Collection } from '../model/collection';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { NumberItems } from '../model/numberItems';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 
 @Component({
   selector: 'app-collection-list',
   templateUrl: './collection-list.component.html',
-  styleUrls: ['./collection-list.component.css']
+  styleUrls: ['./collection-list.component.css'],
+  providers: [CollectionService]
 })
+
 export class CollectionListComponent implements OnInit {
   loading = false;
   errorMessage = '';
   emptyList : boolean;
   collections: Collection[];
-  searchByName: string = "";
-
+  currentVal: string = "";
+  results: any[] = [];
+  searchText: string = "";
+  private storeIdSubject = new Subject<string>();
   page: Number = 1
   items: Number = 1
   selectBy = "id"
   numberSelected: any = {};
   numberItems: NumberItems[];
 
+  readonly stores$ = this.storeIdSubject.pipe(
+    debounceTime(250),
+    distinctUntilChanged(),
+    switchMap(storeName => this.collectionService.getStoresBySearchedName(storeName))
+  );
 
   constructor(private collectionService: CollectionService) { }
 
@@ -56,7 +66,29 @@ export class CollectionListComponent implements OnInit {
           this.errorMessage = error;
         });
   }
+
   onNumberSelected(val: NumberItems) {
     this.items = val.number;
+  }
+
+  searchStore(val) {
+    this.currentVal = val;
+    this.collectionService.getStoresBySearchedName(val)
+      .subscribe(collections => {
+        this.errorMessage = '';
+
+        if (collections.length > 0) {
+          this.collections = [...collections];
+          console.log(collections);
+        } else {
+          this.emptyList = true;
+        }
+
+        this.loading = false;
+      },
+        error => {
+          this.loading = false;
+          this.errorMessage = error;
+        });
   }
 }

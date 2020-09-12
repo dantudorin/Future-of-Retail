@@ -30,7 +30,6 @@ public class StoreService {
     @Autowired
     Converter converter;
 
-
     public List<StoreDTO> findByPage(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNo-1,pageSize, Sort.by(sortBy));
         Page<Store> storePage = repository.findAll(pageable);
@@ -45,6 +44,27 @@ public class StoreService {
         return storeDTOS;
     }
 
+
+    public List<StoreDTO> findAll() {
+
+        List<Store> storeList= (List<Store>) repository.findAll();
+        List<StoreDTO> storeDTOS = new ArrayList<>();
+
+        for (Store s : storeList) {
+            storeDTOS.add(converter.convertToDTO(s));
+        }
+        return storeDTOS;
+    }
+
+    public List<StoreDTO> findAllByName(String name) {
+
+        List<StoreDTO> storeDTOS = new ArrayList<>();
+
+        repository.findAll().forEach(store -> {if(store.getName().toLowerCase().contains(name))
+            storeDTOS.add(converter.convertToDTO(store));
+        });
+        return storeDTOS;
+    }
 
     public StoreDTO findStoreById(long id) throws NotFoundException {
         Optional<Store> optionalStore = repository.findById(id);
