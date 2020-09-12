@@ -36,7 +36,7 @@ export class CollectionService {
   }
 
   getStoresBySearchedName(storeName: string): Observable<Collection[]> {
-    return this.http.get<Collection[]>(this.serverURL + this.collectionAPI + this.filterApi + '?storeName=' + storeName)
+    return this.http.get<Collection[]>(this.serverURL + this.collectionAPI + this.filterApi +'?storeName='+storeName)
       .pipe(
         catchError(this.handleError)
       )

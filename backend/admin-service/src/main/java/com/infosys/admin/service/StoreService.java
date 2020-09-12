@@ -59,12 +59,12 @@ public class StoreService {
     public List<StoreDTO> findAllByName(String name) {
 
         List<StoreDTO> storeDTOS = new ArrayList<>();
-
         repository.findAll().forEach(store -> {if(store.getName().toLowerCase().contains(name))
-            storeDTOS.add(converter.convertToDTO(store));
-        });
+                    storeDTOS.add(converter.convertToDTO(store));
+                                    });
         return storeDTOS;
     }
+
 
     public StoreDTO findStoreById(long id) throws NotFoundException {
         Optional<Store> optionalStore = repository.findById(id);

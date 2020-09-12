@@ -70,8 +70,7 @@ export class CollectionListComponent implements OnInit {
   onNumberSelected(val: NumberItems) {
     this.items = val.number;
   }
-
-  searchStore(val) {
+searchStore(val) {
     this.currentVal = val;
     this.collectionService.getStoresBySearchedName(val)
       .subscribe(collections => {
