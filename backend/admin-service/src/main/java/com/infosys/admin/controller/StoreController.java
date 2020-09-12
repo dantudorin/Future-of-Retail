@@ -49,15 +49,6 @@ public class StoreController {
         return responseEntity;
     }
 
-    @GetMapping("/filter-stores")
-    public ResponseEntity<List<StoreDTO>> getStoresBySearchedName(
-            @RequestParam String storeName)
-    {
-        List<StoreDTO> storesDto = service.findAllByName(storeName);
-        ResponseEntity<List<StoreDTO>> responseEntity = new ResponseEntity<List<StoreDTO>>(storesDto, HttpStatus.OK);
-        return responseEntity;
-    }
-
     @GetMapping("{id}")
     public ResponseEntity<StoreDTO> getStoreById(@PathVariable(value = "id") long id) {
         StoreDTO response;
