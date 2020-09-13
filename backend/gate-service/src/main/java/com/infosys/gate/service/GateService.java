@@ -29,6 +29,7 @@ public class GateService {
     public boolean processEntryRequest(EntryRequest entryRequest) throws UserNotFoundException, NotFoundException {
         Customer customer = customerRepository.findById(entryRequest.getCustomerId())
                 .orElseThrow(() ->new UserNotFoundException(entryRequest.getCustomerId()));
+
         entryRequest.getPhotos().stream().forEach(photo -> {
             boolean indexed = false;
             try {

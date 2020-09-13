@@ -8,7 +8,6 @@ import com.infosys.admin.model.Store;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest(classes = AdminService.class)
@@ -22,8 +21,8 @@ public class StoreRepositoryTest{
         Store s = new Store(name, "paris", (Date) null);
         storeRepository.save(s);
 
-        Optional<List<Store>> found = storeRepository.findByName(name);
-            assertThat(found.get().get(0).getName())
+        Optional<Store> found = storeRepository.findByName(name);
+            assertThat(found.get().getName())
                 .isEqualTo(name);
     }
 }
