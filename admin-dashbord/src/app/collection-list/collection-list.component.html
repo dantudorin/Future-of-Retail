@@ -6,7 +6,6 @@
 
 <ngb-alert *ngIf="errorMessage.length > 0" [dismissible]="false" type="danger" class="errorMessage">{{errorMessage}}</ngb-alert>
 
-
 <div class="form-group">
 <label for="number">Select number of items</label>
 <select number="number" [(ngModel)]="numberSelected" (ngModelChange)='onNumberSelected($event)' class="form-control">
@@ -20,6 +19,7 @@
 
 <ng-template #listBlock>
   <div class="listFrame">
+    <input type="text" placeholder="search store here" (input)="searchStore($event.target.value)">
     <app-collection-item *ngFor="let collection of collections | paginate:{id:'some_id', itemsPerPage: items, currentPage: page} " [collection]="collection"></app-collection-item>
   </div>
 

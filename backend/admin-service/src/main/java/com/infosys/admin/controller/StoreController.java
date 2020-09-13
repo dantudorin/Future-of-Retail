@@ -63,6 +63,14 @@ public class StoreController {
         return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
 
+    @GetMapping("/filter-stores")
+    public ResponseEntity<List<StoreDTO>> getStoresBySearchedName(
+            @RequestParam String storeName)
+    {
+        List<StoreDTO> storesDto = service.findAllByName(storeName);
+        ResponseEntity<List<StoreDTO>> responseEntity = new ResponseEntity<List<StoreDTO>>(storesDto, HttpStatus.OK);
+        return responseEntity;
+    }
 
     @DeleteMapping("/delete{id}")
     public ResponseEntity<Store> deleteStoreById(@PathVariable(value = "id") Long id) {
