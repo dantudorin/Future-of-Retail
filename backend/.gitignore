@@ -2,6 +2,7 @@
 /admin-service/admin-service.iml
 /.idea/
 /gate-service/gate-service.iml
+/shelf-service/target/
 /shelf-service/shelf-service.iml
 /future-of-retail.iml
 /gate-service/target/
